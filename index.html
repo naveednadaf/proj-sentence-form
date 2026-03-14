@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Translator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🀄 Translate to Chinese</h1>
+      <div class="file-selector">
+        <label for="fileSelect">Question Bank:</label>
+        <select id="fileSelect"></select>
+        <input type="file" id="fileUpload" accept=".md" />
+        <label for="fileUpload" class="upload-btn">📁 Upload .md</label>
+      </div>
+      <div class="progress">
+        <span id="score">Score: 0</span>
+        <span id="streak">🔥 Streak: 0</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="sentence-box">
+        <p class="english-sentence" id="englishSentence"></p>
+      </div>
+
+      <div class="word-bank" id="wordBank"></div>
+      
+      <div class="answer-area">
+        <div class="answer-slots" id="answerSlots"></div>
+      </div>
+
+      <button class="check-btn" id="checkBtn">Check Answer</button>
+      
+      <div class="feedback" id="feedback"></div>
+      
+      <button class="next-btn hidden" id="nextBtn">Next →</button>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
