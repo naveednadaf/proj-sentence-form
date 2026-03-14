@@ -35,12 +35,20 @@ async function loadSentences() {
     }
 
     const response = await fetch(currentFile);
+    if (!response.ok) {
+      throw new Error('Failed to load ' + currentFile);
+    }
     const text = await response.text();
     sentences = parseSentences(text);
+
+    if (sentences.length === 0) {
+      throw new Error('No sentences found');
+    }
+
     loadSentence();
   } catch (error) {
     console.error('Error loading sentences:', error);
-    englishSentenceEl.textContent = 'Error loading ' + currentFile;
+    englishSentenceEl.textContent = 'Error: ' + error.message;
   }
 }
 
@@ -54,7 +62,6 @@ function loadAvailableFiles() {
   });
 
   currentFile = questionBanks[0]?.file || 'question-banks/sentences.md';
-  loadSentence();
 }
 
 function parseSentences(markdown) {
@@ -181,16 +188,20 @@ nextBtn.addEventListener('click', loadSentence);
 
 fileSelectEl.addEventListener('change', (e) => {
   if (e.target.value === 'uploaded') {
-    sentences = uploadedSentences;
+    if (uploadedSentences) {
+      sentences = uploadedSentences;
+      loadSentence();
+    }
   } else {
     currentFile = e.target.value;
     uploadedSentences = null;
+    sentences = [];
+    loadSentences();
   }
   score = 0;
   streak = 0;
   scoreEl.textContent = 'Score: 0';
   streakEl.textContent = '🔥 Streak: 0';
-  loadSentence();
 });
 
 fileUploadEl.addEventListener('change', (e) => {
@@ -221,3 +232,4 @@ fileUploadEl.addEventListener('change', (e) => {
 });
 
 loadAvailableFiles();
+loadSentences();

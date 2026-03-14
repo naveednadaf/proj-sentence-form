@@ -1,11 +1,5 @@
 # Sentence Bank
 
-## Format
-Each line: `English sentence | Chinese sentence`
-The app will automatically split and scramble the Chinese characters.
-
----
-
 I love you | 我爱你
 Hello, how are you? | 你好吗怎么你
 Thank you very much | 非常谢谢你
