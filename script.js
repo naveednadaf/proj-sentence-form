@@ -16,8 +16,15 @@ const streakEl = document.getElementById('streak');
 const fileSelectEl = document.getElementById('fileSelect');
 const fileUploadEl = document.getElementById('fileUpload');
 
-let currentFile = 'sentences.md';
+let currentFile = 'question-banks/sentences.md';
 let uploadedSentences = null;
+
+// Predefined question banks in the question-banks folder
+const questionBanks = [
+  { file: 'question-banks/sentences.md', name: 'Sentences' },
+  { file: 'question-banks/questions.md', name: 'Questions' },
+  { file: 'question-banks/advanced.md', name: 'Advanced' }
+];
 
 async function loadSentences() {
   try {
@@ -37,30 +44,17 @@ async function loadSentences() {
   }
 }
 
-async function loadAvailableFiles() {
-  try {
-    const response = await fetch('file-list.json');
-    const files = await response.json();
-
-    fileSelectEl.innerHTML = '';
-    files.forEach(file => {
-      const option = document.createElement('option');
-      option.value = file.file;
-      option.textContent = file.name;
-      fileSelectEl.appendChild(option);
-    });
-
-    currentFile = files[0]?.file || 'sentences.md';
-    loadSentences();
-  } catch (error) {
-    console.error('Error loading file list:', error);
+function loadAvailableFiles() {
+  fileSelectEl.innerHTML = '';
+  questionBanks.forEach(bank => {
     const option = document.createElement('option');
-    option.value = 'sentences.md';
-    option.textContent = 'Sentences';
+    option.value = bank.file;
+    option.textContent = bank.name;
     fileSelectEl.appendChild(option);
-    currentFile = 'sentences.md';
-    loadSentences();
-  }
+  });
+
+  currentFile = questionBanks[0]?.file || 'question-banks/sentences.md';
+  loadSentence();
 }
 
 function parseSentences(markdown) {
@@ -187,7 +181,6 @@ nextBtn.addEventListener('click', loadSentence);
 
 fileSelectEl.addEventListener('change', (e) => {
   if (e.target.value === 'uploaded') {
-    // Use uploaded sentences
     sentences = uploadedSentences;
   } else {
     currentFile = e.target.value;
@@ -197,7 +190,7 @@ fileSelectEl.addEventListener('change', (e) => {
   streak = 0;
   scoreEl.textContent = 'Score: 0';
   streakEl.textContent = '🔥 Streak: 0';
-  loadSentences();
+  loadSentence();
 });
 
 fileUploadEl.addEventListener('change', (e) => {
@@ -207,11 +200,14 @@ fileUploadEl.addEventListener('change', (e) => {
     reader.onload = (event) => {
       uploadedSentences = parseSentences(event.target.result);
 
-      // Add to dropdown
-      const option = document.createElement('option');
-      option.value = 'uploaded';
-      option.textContent = '📄 ' + file.name;
-      fileSelectEl.appendChild(option);
+      // Check if already added
+      let uploadedOption = fileSelectEl.querySelector('option[value="uploaded"]');
+      if (!uploadedOption) {
+        uploadedOption = document.createElement('option');
+        uploadedOption.value = 'uploaded';
+        uploadedOption.textContent = '📄 Uploaded';
+        fileSelectEl.appendChild(uploadedOption);
+      }
       fileSelectEl.value = 'uploaded';
 
       score = 0;

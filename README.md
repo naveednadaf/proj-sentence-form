@@ -27,9 +27,14 @@ A Duolingo-style game for practicing Chinese translation by rearranging words.
    Another sentence | 另一个句子
    ```
 
-3. **Update the file list** - Run:
-   ```bash
-   node generate-file-list.js
+3. **Edit `script.js`** - Add your file to the `questionBanks` array (around line 22):
+   ```javascript
+   const questionBanks = [
+     { file: 'question-banks/sentences.md', name: 'Sentences' },
+     { file: 'question-banks/questions.md', name: 'Questions' },
+     { file: 'question-banks/advanced.md', name: 'Advanced' },
+     { file: 'question-banks/your-file.md', name: 'Your File' }  // Add here
+   ];
    ```
 
 4. **Deploy** to GitHub Pages
